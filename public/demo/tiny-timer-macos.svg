@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="800" viewBox="0 0 1280 800" role="img" aria-label="Tiny Timer macOS screenshot">
+  <rect width="1280" height="800" fill="#f1f5f9"/>
+  <rect x="308" y="112" width="664" height="576" rx="34" fill="#fff"/>
+  <text x="508" y="214" font-family="Segoe UI, sans-serif" font-size="42" fill="#0f172a">Tiny Timer</text>
+  <circle cx="640" cy="398" r="142" fill="#e2e8f0"/>
+  <path d="M640 288v118l74 52" stroke="#0f172a" stroke-width="18" stroke-linecap="round"/>
+  <rect x="536" y="584" width="208" height="58" rx="22" fill="#0f172a"/>
+</svg>

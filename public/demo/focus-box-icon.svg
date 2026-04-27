@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-label="Focus Box icon">
+  <rect width="256" height="256" rx="56" fill="#2563eb"/>
+  <rect x="54" y="58" width="148" height="140" rx="28" fill="#ffffff" opacity=".95"/>
+  <path d="M78 95h100M78 128h72M78 161h52" stroke="#1d4ed8" stroke-width="14" stroke-linecap="round"/>
+</svg>

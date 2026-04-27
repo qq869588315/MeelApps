@@ -1,0 +1,14 @@
+apps.aameel.top {
+  encode zstd gzip
+
+  handle_path /uploads/* {
+    root * /data/uploads
+    file_server
+  }
+
+  handle_path /stats/* {
+    reverse_proxy umami:3000
+  }
+
+  reverse_proxy app:3000
+}

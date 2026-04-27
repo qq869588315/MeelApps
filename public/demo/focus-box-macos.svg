@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="800" viewBox="0 0 1280 800" role="img" aria-label="Focus Box macOS screenshot">
+  <rect width="1280" height="800" fill="#dbeafe"/>
+  <rect x="124" y="104" width="1032" height="592" rx="30" fill="#fff"/>
+  <circle cx="172" cy="142" r="12" fill="#ef4444"/>
+  <circle cx="210" cy="142" r="12" fill="#f59e0b"/>
+  <circle cx="248" cy="142" r="12" fill="#22c55e"/>
+  <text x="164" y="218" font-family="Segoe UI, sans-serif" font-size="36" fill="#0f172a">Today</text>
+  <rect x="164" y="260" width="420" height="96" rx="20" fill="#eff6ff"/>
+  <rect x="164" y="388" width="420" height="96" rx="20" fill="#f8fafc"/>
+  <rect x="636" y="260" width="360" height="224" rx="22" fill="#2563eb" opacity=".12"/>
+</svg>

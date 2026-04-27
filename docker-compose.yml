@@ -1,0 +1,101 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      NODE_ENV: ${NODE_ENV:-production}
+      APP_URL: ${APP_URL:-https://apps.aameel.top}
+      DEFAULT_LOCALE: ${DEFAULT_LOCALE:-zh}
+      SUPPORTED_LOCALES: ${SUPPORTED_LOCALES:-zh,en}
+      DATABASE_URL: ${DATABASE_URL:-postgres://meel_apps_user:password@postgres:5432/meel_apps}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@example.com}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
+      ADMIN_PASSWORD_HASH: ${ADMIN_PASSWORD_HASH:-}
+      SESSION_SECRET: ${SESSION_SECRET:-change_me_to_a_long_random_secret}
+      STORAGE_DRIVER: ${STORAGE_DRIVER:-local}
+      UPLOAD_DIR: ${UPLOAD_DIR:-/data/uploads}
+      PUBLIC_UPLOAD_BASE_URL: ${PUBLIC_UPLOAD_BASE_URL:-/uploads}
+      IMAGE_MAX_BYTES: ${IMAGE_MAX_BYTES:-10485760}
+      DOWNLOAD_MAX_BYTES: ${DOWNLOAD_MAX_BYTES:-314572800}
+      UMAMI_URL: ${UMAMI_URL:-https://apps.aameel.top/stats}
+      UMAMI_WEBSITE_ID: ${UMAMI_WEBSITE_ID:-}
+      UMAMI_SCRIPT_URL: ${UMAMI_SCRIPT_URL:-}
+    volumes:
+      - uploads:/data/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  postgres:
+    image: postgres:16-alpine
+    ports:
+      - "127.0.0.1:5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres_password}
+      MEEL_APPS_DB_PASSWORD: ${MEEL_APPS_DB_PASSWORD:-password}
+      UMAMI_DB_PASSWORD: ${UMAMI_DB_PASSWORD:-password}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  umami:
+    image: ghcr.io/umami-software/umami:postgresql-latest
+    environment:
+      DATABASE_URL: ${UMAMI_DATABASE_URL:-postgres://umami_user:password@postgres:5432/umami}
+      DATABASE_TYPE: postgresql
+      HASH_SALT: ${UMAMI_HASH_SALT:-change_me_umami_salt}
+      APP_SECRET: ${UMAMI_HASH_SALT:-change_me_umami_salt}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  caddy:
+    image: caddy:2-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - uploads:/data/uploads:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - app
+      - umami
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  postgres_data:
+  uploads:
+  caddy_data:
+  caddy_config:

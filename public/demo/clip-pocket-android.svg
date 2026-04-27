@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="1280" viewBox="0 0 720 1280" role="img" aria-label="Clip Pocket Android screenshot">
+  <rect width="720" height="1280" fill="#ccfbf1"/>
+  <rect x="74" y="72" width="572" height="1136" rx="48" fill="#fff"/>
+  <text x="130" y="178" font-family="Segoe UI, sans-serif" font-size="42" fill="#115e59">Inbox</text>
+  <rect x="130" y="238" width="460" height="120" rx="26" fill="#f0fdfa"/>
+  <rect x="130" y="394" width="460" height="120" rx="26" fill="#f0fdfa"/>
+  <rect x="130" y="550" width="460" height="120" rx="26" fill="#d1fae5"/>
+  <circle cx="536" cy="1080" r="48" fill="#0f766e"/>
+</svg>

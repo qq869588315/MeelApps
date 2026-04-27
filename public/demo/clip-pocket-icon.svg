@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-label="Clip Pocket icon">
+  <rect width="256" height="256" rx="56" fill="#059669"/>
+  <path d="M72 72h112v112H72z" fill="#fff" opacity=".92"/>
+  <path d="M96 72v-8c0-18 14-32 32-32s32 14 32 32v8" fill="none" stroke="#a7f3d0" stroke-width="14" stroke-linecap="round"/>
+  <path d="M98 112h60M98 144h42" stroke="#047857" stroke-width="12" stroke-linecap="round"/>
+</svg>

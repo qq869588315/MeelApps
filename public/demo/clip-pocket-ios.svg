@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="1280" viewBox="0 0 720 1280" role="img" aria-label="Clip Pocket iOS screenshot">
+  <rect width="720" height="1280" fill="#ecfdf5"/>
+  <rect x="84" y="92" width="552" height="1096" rx="58" fill="#fff"/>
+  <text x="138" y="188" font-family="Segoe UI, sans-serif" font-size="42" fill="#064e3b">Clip Pocket</text>
+  <rect x="138" y="252" width="444" height="132" rx="28" fill="#d1fae5"/>
+  <rect x="138" y="420" width="444" height="132" rx="28" fill="#f0fdf4"/>
+  <rect x="138" y="588" width="444" height="132" rx="28" fill="#f0fdf4"/>
+  <rect x="138" y="756" width="260" height="64" rx="24" fill="#10b981"/>
+</svg>
