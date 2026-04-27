@@ -1,58 +1,58 @@
 # Meel Apps
 
-English | [简体中文](README.zh-CN.md)
+[English](README.en.md) | 简体中文
 
-Meel Apps is a personal product showcase and lightweight app distribution site. It combines the public product catalog, product detail pages, download tracking, a small admin console, local uploads, multilingual content, and basic analytics in one Next.js App Router application.
+Meel Apps 是一个个人产品展示与轻量分发网站。它把前台产品列表、产品详情、下载记录、后台管理、本地上传、多语言内容和基础统计放在同一个 Next.js App Router 应用里，适合展示桌面工具、移动 App 和后续插件类产品。
 
-## Features
+## 功能特性
 
-- Public product listing with search, category, platform, type, language, and sort filters.
-- Product detail pages with screenshots, changelog, documents, localized content, and per-platform download buttons.
-- Chinese and English routes under `/zh` and `/en`; `/` redirects to `/zh`.
-- Admin console for dashboard, products, drafts, categories, statistics, and site settings.
-- Product editor with tabs for base info, localized content, platforms, media, changelog, documents, policies, and SEO.
-- Local upload adapter for images and download packages, with MIME, extension, size, filename, and path traversal checks.
-- Download API that records download events before redirecting to an internal file or external URL.
-- PostgreSQL schema managed by Drizzle ORM.
-- Docker Compose stack for the app, PostgreSQL, Umami, and Caddy.
+- 前台产品列表支持搜索、分类、平台、类型、语言和排序筛选。
+- 产品详情页展示截图、版本与系统、更新日志、文档、隐私政策、服务条款和相关推荐。
+- “版本与系统”表格按平台提供下载入口，点击下载会先记录事件，再跳转到本地文件或外部地址。
+- 支持中文和英文路由：`/zh`、`/en`，根路径 `/` 默认跳转到 `/zh`。
+- 后台包含 Dashboard、Products、Drafts、Categories、Stats、Settings。
+- 产品编辑页按标签组织：基础信息、中文内容、英文内容、平台与下载、图片素材、更新日志、文档与政策、SEO。
+- 本地上传适配器支持图片和安装包，并校验 MIME、扩展名、大小、文件名和路径穿越。
+- PostgreSQL + Drizzle ORM 管理数据库结构和迁移。
+- Docker Compose 提供 app、postgres、umami、caddy 四个服务。
 
-## Tech Stack
+## 技术栈
 
-- Next.js App Router, React, and TypeScript
-- Tailwind CSS and local UI components
-- PostgreSQL and Drizzle ORM
-- Cookie-based admin sessions with hashed passwords
-- Local filesystem storage, with an OSS adapter interface reserved for future use
-- Umami analytics
-- Docker Compose and Caddy
+- Next.js App Router、React、TypeScript
+- Tailwind CSS、本地基础组件、lucide-react 图标
+- PostgreSQL、Drizzle ORM
+- Cookie Session 后台登录，密码使用 bcrypt 哈希
+- 本地文件存储，预留 OSS Storage Adapter 接口
+- Umami 自托管统计
+- Docker Compose、Caddy HTTPS 反向代理
 
-## Project Structure
+## 目录结构
 
 ```text
-app/                  Next.js routes, admin pages, public pages, and APIs
-components/           Frontend and UI components
-lib/                  Database, auth, storage, markdown, settings, and product helpers
-drizzle/              SQL migrations
-scripts/              Migration, seed, and admin initialization scripts
-docker/               PostgreSQL initialization scripts
-public/               Local demo media and public assets
+app/                  Next.js 路由、后台页面、前台页面和 API
+components/           前台组件与通用 UI 组件
+lib/                  数据库、登录、存储、Markdown、设置和产品数据逻辑
+drizzle/              SQL 迁移文件
+scripts/              迁移、种子数据和管理员初始化脚本
+docker/               PostgreSQL 初始化脚本
+public/               本地 demo 媒体和公共资源
 ```
 
-## Requirements
+## 环境要求
 
 - Node.js 20+
 - pnpm 10+
-- PostgreSQL 16+ for local development, or Docker Desktop for the Compose stack
+- 本地开发需要 PostgreSQL 16+，也可以直接使用 Docker Desktop 启动 Compose 服务
 
-## Environment
+## 环境变量
 
-Copy the example file before starting:
+先复制示例文件：
 
 ```bash
 cp .env.example .env
 ```
 
-Important variables:
+关键变量：
 
 ```env
 APP_URL=https://apps.aameel.top
@@ -67,24 +67,24 @@ PUBLIC_UPLOAD_BASE_URL=/uploads
 UMAMI_URL=https://apps.aameel.top/stats
 ```
 
-Set a real `SESSION_SECRET` and either `ADMIN_PASSWORD` or `ADMIN_PASSWORD_HASH` before production deployment.
+生产环境必须修改 `SESSION_SECRET`，并通过 `ADMIN_PASSWORD` 或 `ADMIN_PASSWORD_HASH` 设置真实后台密码。
 
-## Local Development
+## 本地开发
 
-Install dependencies:
+安装依赖：
 
 ```bash
 corepack enable
 pnpm install
 ```
 
-Start PostgreSQL with Docker:
+用 Docker 启动 PostgreSQL：
 
 ```bash
 docker compose up -d postgres
 ```
 
-Run database setup:
+初始化数据库：
 
 ```bash
 pnpm db:migrate
@@ -92,53 +92,53 @@ pnpm db:seed
 pnpm admin:init
 ```
 
-Start the development server:
+启动开发服务：
 
 ```bash
 pnpm dev
 ```
 
-Open:
+访问地址：
 
-- Public site: `http://127.0.0.1:3000/zh`
-- Admin login: `http://127.0.0.1:3000/admin/login`
+- 前台：`http://127.0.0.1:3000/zh`
+- 后台登录：`http://127.0.0.1:3000/admin/login`
 
-Default seeded admin:
+种子数据默认管理员：
 
-- Email: `admin@example.com`
-- Password: `change_me_admin_password`
+- 邮箱：`admin@example.com`
+- 密码：`change_me_admin_password`
 
-Change the password before using the project outside local development.
+正式部署前请务必修改默认密码。
 
-## Scripts
+## 常用脚本
 
 ```bash
-pnpm dev          # Start Next.js in development mode
-pnpm build        # Build the production app
-pnpm start        # Start the production server
-pnpm typecheck    # Run TypeScript checks
-pnpm lint         # Run ESLint
-pnpm db:generate  # Generate Drizzle migrations
-pnpm db:migrate   # Apply database migrations
-pnpm db:seed      # Seed demo categories, products, media, documents, and changelogs
-pnpm admin:init   # Create or update the admin account from env values
+pnpm dev          # 启动开发服务
+pnpm build        # 构建生产版本
+pnpm start        # 启动生产服务
+pnpm typecheck    # TypeScript 类型检查
+pnpm lint         # ESLint 检查
+pnpm db:generate  # 生成 Drizzle 迁移
+pnpm db:migrate   # 执行数据库迁移
+pnpm db:seed      # 写入示例分类、产品、媒体、文档和更新日志
+pnpm admin:init   # 根据环境变量创建或更新管理员
 ```
 
-## Docker Deployment
+## Docker 部署
 
-Copy and edit environment values:
+复制并修改环境变量：
 
 ```bash
 cp .env.example .env
 ```
 
-Start the stack:
+启动服务：
 
 ```bash
 docker compose up -d --build
 ```
 
-Initialize the database:
+初始化数据库：
 
 ```bash
 docker compose exec app pnpm db:migrate
@@ -146,39 +146,39 @@ docker compose exec app pnpm db:seed
 docker compose exec app pnpm admin:init
 ```
 
-The Compose stack includes:
+Compose 服务包含：
 
-- `app`: Next.js public site, admin console, and API routes
-- `postgres`: business database and Umami database
-- `umami`: self-hosted analytics
-- `caddy`: HTTPS reverse proxy for `apps.aameel.top`, `/stats/*`, and `/uploads/*`
+- `app`：Next.js 前台、后台和 API
+- `postgres`：业务数据库和 Umami 数据库
+- `umami`：自托管访问统计
+- `caddy`：为 `apps.aameel.top`、`/stats/*`、`/uploads/*` 提供 HTTPS 和反向代理
 
-Persistent data:
+持久化数据：
 
-- PostgreSQL data is stored in the `postgres_data` volume.
-- Uploaded files are stored in the `uploads` volume.
-- Caddy state is stored in `caddy_data` and `caddy_config`.
+- PostgreSQL 数据保存在 `postgres_data` volume。
+- 上传文件保存在 `uploads` volume。
+- Caddy 状态保存在 `caddy_data` 和 `caddy_config`。
 
-## Storage
+## 存储与上传
 
-The first version implements the local storage adapter:
+当前版本完整实现 local storage adapter：
 
-- Images are written to `UPLOAD_DIR/images`.
-- Download packages are written to `UPLOAD_DIR/downloads`.
-- Public URLs are generated from `PUBLIC_UPLOAD_BASE_URL`.
+- 图片写入 `UPLOAD_DIR/images`。
+- 安装包写入 `UPLOAD_DIR/downloads`。
+- 公开访问路径通过 `PUBLIC_UPLOAD_BASE_URL` 生成。
 
-The OSS adapter interface is present but intentionally left as a TODO.
+OSS adapter 接口已预留，当前作为 TODO。
 
-Default upload limits:
+默认上传限制：
 
-- Images: 10 MB
-- Download packages: 300 MB
+- 图片：10 MB
+- 安装包：300 MB
 
-These can be changed with `IMAGE_MAX_BYTES` and `DOWNLOAD_MAX_BYTES`.
+可以通过 `IMAGE_MAX_BYTES` 和 `DOWNLOAD_MAX_BYTES` 调整。
 
-## Routes
+## 路由
 
-Public:
+前台：
 
 - `/`
 - `/zh`
@@ -188,7 +188,7 @@ Public:
 - `/[locale]/apps/[slug]/privacy`
 - `/[locale]/apps/[slug]/terms`
 
-Admin:
+后台：
 
 - `/admin/login`
 - `/admin/dashboard`
@@ -198,7 +198,7 @@ Admin:
 - `/admin/stats`
 - `/admin/settings`
 
-APIs:
+API：
 
 - `/api/admin/auth/login`
 - `/api/admin/auth/logout`
@@ -209,9 +209,9 @@ APIs:
 - `/api/admin/upload`
 - `/api/download?platformId=...&locale=zh`
 
-## Validation
+## 验证
 
-Run these before deploying:
+发布前建议执行：
 
 ```bash
 pnpm typecheck
@@ -219,22 +219,22 @@ pnpm lint
 pnpm build
 ```
 
-Manual checks worth covering:
+建议人工验收：
 
-- Admin login and logout
-- Create draft, publish, hide, and delete restrictions
-- Upload image and download package
-- Public product visibility for published, hidden, draft, and deleted products
-- `/zh` and `/en` language switching
-- Product detail downloads and download event recording
-- Docker restart persistence for PostgreSQL and uploads
+- 后台登录和退出
+- 新建草稿、发布、隐藏、删除限制
+- 上传图片和安装包
+- 草稿、隐藏、删除产品在前台不可见
+- `/zh` 和 `/en` 语言切换
+- 产品详情页按系统下载并记录下载事件
+- Docker 重启后数据库和上传文件不丢失
 
-## Security Notes
+## 安全说明
 
-- Admin pages and `/api/admin/*` routes validate sessions on the server.
-- Passwords are stored as bcrypt hashes.
-- Session cookies are HttpOnly, SameSite, and Secure in production.
-- Markdown is sanitized before rendering.
-- Uploads are checked by type, extension, size, filename, and final path.
-- Published products cannot be deleted directly; they must be hidden first.
-- Replace every default secret before production deployment.
+- 后台页面和 `/api/admin/*` 服务端都会校验登录态。
+- 管理员密码使用 bcrypt 哈希存储。
+- Session Cookie 使用 HttpOnly，生产环境启用 Secure，并设置 SameSite。
+- Markdown 渲染前会进行安全清理。
+- 上传接口校验 MIME、扩展名、大小、文件名和最终路径。
+- 已发布产品后端不允许直接删除，必须先隐藏。
+- 生产部署前请替换所有默认密钥和默认密码。
