@@ -9,12 +9,12 @@ import {
 import { LogoutButton } from "./logout-button";
 
 const navItems = [
-  { href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/admin/products", label: "Products", icon: Package },
-  { href: "/admin/drafts", label: "Drafts", icon: FileText },
-  { href: "/admin/categories", label: "Categories", icon: FolderTree },
-  { href: "/admin/stats", label: "Stats", icon: BarChart3 },
-  { href: "/admin/settings", label: "Settings", icon: Settings }
+  { href: "/admin/dashboard", label: "数据概览", icon: LayoutDashboard },
+  { href: "/admin/products", label: "产品管理", icon: Package },
+  { href: "/admin/drafts", label: "草稿箱", icon: FileText },
+  { href: "/admin/categories", label: "分类管理", icon: FolderTree },
+  { href: "/admin/stats", label: "数据统计", icon: BarChart3 },
+  { href: "/admin/settings", label: "系统设置", icon: Settings }
 ];
 
 export function AdminShell({
@@ -35,7 +35,7 @@ export function AdminShell({
               M
             </div>
             <div>
-              <div className="text-sm font-semibold text-slate-950">Meel Apps Admin</div>
+              <div className="text-sm font-semibold text-slate-950">Meel Apps 后台</div>
               <div className="text-xs text-slate-500">apps.aameel.top</div>
             </div>
           </a>

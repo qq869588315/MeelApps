@@ -10,7 +10,7 @@ export default async function SettingsPage() {
   const [admin, settings] = await Promise.all([requireAdmin(), getSiteSettings()]);
   return (
     <AdminShell active="/admin/settings" adminEmail={admin.email}>
-      <PageTitle title="Settings" description="维护站点基础信息、SEO、统计和当前存储配置。" />
+      <PageTitle title="系统设置" description="维护站点基础信息、搜索优化、统计和当前存储配置。" />
       <SettingsForm settings={settings} />
     </AdminShell>
   );

@@ -11,7 +11,7 @@ export default async function StatsPage() {
   const [admin, stats] = await Promise.all([requireAdmin(), getDashboardStats()]);
   return (
     <AdminShell active="/admin/stats" adminEmail={admin.email}>
-      <PageTitle title="Stats" description="第一版以下载点击统计为主。" />
+      <PageTitle title="数据统计" description="第一版以下载点击统计为主。" />
       <div className="grid gap-4 md:grid-cols-3">
         <Metric label="总点击" value={stats.downloads} />
         <Metric label="产品数" value={stats.products.total} />

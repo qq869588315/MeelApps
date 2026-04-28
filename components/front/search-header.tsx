@@ -1,6 +1,6 @@
 "use client";
 
-import { Menu, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import type { Locale } from "@/lib/db/schema";
 import { ui } from "@/lib/i18n";
 import { LanguageSwitcher } from "./language-switcher";
@@ -40,19 +40,9 @@ export function SearchHeader({
           </div>
         </div>
 
-        <nav className="hidden items-center gap-6 text-sm text-slate-600 md:flex">
-          <a href={`/${locale}#products`} className="hover:text-slate-950">
-            {t.products}
-          </a>
-          <a href={`/${locale}#docs`} className="hover:text-slate-950">
-            {t.docs}
-          </a>
+        <nav className="flex items-center">
           <LanguageSwitcher locale={locale} />
         </nav>
-        <div className="flex items-center gap-2 md:hidden">
-          <LanguageSwitcher locale={locale} />
-          <Menu className="h-6 w-6 text-slate-700" />
-        </div>
       </div>
     </header>
   );

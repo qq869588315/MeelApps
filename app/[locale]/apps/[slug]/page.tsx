@@ -242,7 +242,6 @@ export default async function ProductDetailPage({ params }: PageProps) {
       <Footer
         locale={locale}
         icpNumber={settings.icpNumber}
-        contactEmail={settings.contactEmail}
       />
     </div>
   );

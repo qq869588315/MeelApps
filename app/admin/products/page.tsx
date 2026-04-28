@@ -20,7 +20,7 @@ export default async function AdminProductsPage() {
   }));
   return (
     <AdminShell active="/admin/products" adminEmail={admin.email}>
-      <PageTitle title="Products" description="管理产品、草稿、隐藏状态、排序和下载数据。" />
+      <PageTitle title="产品管理" description="管理产品、草稿、隐藏状态、排序和下载数据。" />
       <ProductTable products={rows} />
     </AdminShell>
   );

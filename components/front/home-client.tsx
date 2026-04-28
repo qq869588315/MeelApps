@@ -90,6 +90,13 @@ export function HomeClient({
     });
   }, [category, language, locale, platform, products, query, sort, type]);
 
+  const hasActiveSearchOrFilter =
+    query.trim().length > 0 ||
+    platform !== "all" ||
+    category !== "all" ||
+    type !== "all" ||
+    language !== "all";
+
   const featured = filtered.filter((product) => product.isPinned || product.isFeatured);
 
   const clearFilters = () => {
@@ -149,27 +156,29 @@ export function HomeClient({
         </div>
 
         <div className="min-w-0 space-y-7">
-          <section>
-            <SectionHeader
-              title={t.featured}
-              description={t.publishedOnly}
-              icon={<Star className="h-5 w-5 text-amber-500" />}
-            />
-            {featured.length ? (
-              <div className="mt-4 grid gap-4 xl:grid-cols-2">
-                {featured.map((product, index) => (
-                  <ProductCard
-                    key={product.id}
-                    product={product}
-                    locale={locale}
-                    colorIndex={index}
-                  />
-                ))}
-              </div>
-            ) : (
-              <EmptyState text={t.noResults} />
-            )}
-          </section>
+          {!hasActiveSearchOrFilter ? (
+            <section>
+              <SectionHeader
+                title={t.featured}
+                description={t.publishedOnly}
+                icon={<Star className="h-5 w-5 text-amber-500" />}
+              />
+              {featured.length ? (
+                <div className="mt-4 grid gap-4 xl:grid-cols-2">
+                  {featured.map((product, index) => (
+                    <ProductCard
+                      key={product.id}
+                      product={product}
+                      locale={locale}
+                      colorIndex={index}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <EmptyState text={t.noResults} />
+              )}
+            </section>
+          ) : null}
 
           <section id="products">
             <SectionHeader

@@ -14,15 +14,14 @@ import type {
   ProductStatus,
   ProductType
 } from "@/lib/db/schema";
-import type { ProductPayload } from "@/lib/product-data";
+import type { ProductFormValue } from "@/lib/product-defaults";
+import { formatPlatform } from "@/lib/i18n";
 
 type CategoryOption = {
   id: number;
   slug: string;
   name: string;
 };
-
-type ProductFormValue = ProductPayload & { id?: number };
 
 const tabs = [
   ["base", "基础信息"],
@@ -32,7 +31,7 @@ const tabs = [
   ["media", "图片素材"],
   ["logs", "更新日志"],
   ["docs", "文档与政策"],
-  ["seo", "SEO"]
+  ["seo", "搜索优化"]
 ] as const;
 
 const platforms: Platform[] = ["windows", "macos", "ios", "android", "web", "browser_extension"];
@@ -43,59 +42,14 @@ const badgeTypes: BadgeType[] = [
   "microsoft_store",
   "custom"
 ];
-const documentTypes: DocumentType[] = ["help", "privacy", "terms"];
 
-export function createBlankProduct(categoryId: number | null): ProductFormValue {
-  return {
-    slug: "",
-    status: "draft",
-    isFeatured: false,
-    isPinned: false,
-    sortOrder: 0,
-    categoryId,
-    productType: "desktop",
-    iconUrl: null,
-    translations: {
-      zh: {
-        name: "",
-        shortDescription: "",
-        fullDescription: "",
-        featureHighlights: [],
-        seoTitle: "",
-        seoDescription: ""
-      },
-      en: {
-        name: "",
-        shortDescription: "",
-        fullDescription: "",
-        featureHighlights: [],
-        seoTitle: "",
-        seoDescription: ""
-      }
-    },
-    languages: [
-      {
-        languageCode: "zh-CN",
-        languageNameZh: "中文",
-        languageNameEn: "Chinese",
-        sortOrder: 0
-      }
-    ],
-    platforms: [],
-    media: [],
-    documents: documentTypes.flatMap((type) =>
-      (["zh", "en"] as Locale[]).map((locale) => ({
-        type,
-        locale,
-        contentType: "markdown" as const,
-        content: "",
-        externalUrl: ""
-      }))
-    ),
-    changelogs: []
-  };
-}
-
+const badgeTypeLabels: Record<BadgeType, string> = {
+  direct_download: "直接下载",
+  app_store: "App Store",
+  google_play: "Google Play",
+  microsoft_store: "Microsoft Store",
+  custom: "自定义"
+};
 export function ProductForm({
   initial,
   categories
@@ -110,7 +64,7 @@ export function ProductForm({
   const [saving, setSaving] = useState(false);
 
   const title = useMemo(
-    () => form.translations.zh.name || form.translations.en.name || "New Product",
+    () => form.translations.zh.name || form.translations.en.name || "新建产品",
     [form.translations.en.name, form.translations.zh.name]
   );
 
@@ -207,7 +161,7 @@ export function ProductForm({
       {active === "base" ? (
         <Panel title="基础信息">
           <div className="grid gap-4 md:grid-cols-2">
-            <Field label="Slug" value={form.slug} onChange={(value) => patch({ slug: value })} />
+            <Field label="访问标识" value={form.slug} onChange={(value) => patch({ slug: value })} />
             <Select
               label="状态"
               value={form.status}
@@ -277,7 +231,7 @@ export function ProductForm({
       ) : null}
 
       {active === "seo" ? (
-        <Panel title="SEO">
+        <Panel title="搜索优化">
           <div className="grid gap-4 md:grid-cols-2">
             <Field label="中文 SEO 标题" value={form.translations.zh.seoTitle ?? ""} onChange={(value) => patchTranslation("zh", { seoTitle: value })} />
             <Field label="英文 SEO 标题" value={form.translations.en.seoTitle ?? ""} onChange={(value) => patchTranslation("en", { seoTitle: value })} />
@@ -351,7 +305,7 @@ function LanguagesEditor({
       <div className="space-y-3">
         {form.languages.map((language, index) => (
           <div key={`${language.languageCode}-${index}`} className="grid gap-3 rounded-2xl bg-slate-50 p-3 md:grid-cols-[1fr_1fr_1fr_90px_40px]">
-            <SmallInput label="Code" value={language.languageCode} onChange={(value) => updateArray(setForm, "languages", index, { languageCode: value })} />
+            <SmallInput label="语言代码" value={language.languageCode} onChange={(value) => updateArray(setForm, "languages", index, { languageCode: value })} />
             <SmallInput label="中文名" value={language.languageNameZh} onChange={(value) => updateArray(setForm, "languages", index, { languageNameZh: value })} />
             <SmallInput label="英文名" value={language.languageNameEn} onChange={(value) => updateArray(setForm, "languages", index, { languageNameEn: value })} />
             <SmallInput label="排序" type="number" value={String(language.sortOrder)} onChange={(value) => updateArray(setForm, "languages", index, { sortOrder: Number(value) })} />
@@ -415,9 +369,9 @@ function PlatformsEditor({
               <IconDelete onClick={() => removeArray(setForm, "platforms", index)} />
             </div>
             <div className="grid gap-4 md:grid-cols-3">
-              <Select label="平台" value={platform.platform} onChange={(value) => updateArray(setForm, "platforms", index, { platform: value as Platform })} options={platforms.map((item) => [item, item])} />
+              <Select label="平台" value={platform.platform} onChange={(value) => updateArray(setForm, "platforms", index, { platform: value as Platform })} options={platforms.map((item) => [item, formatPlatform(item)])} />
               <Select label="下载类型" value={platform.downloadType} onChange={(value) => updateArray(setForm, "platforms", index, { downloadType: value as DownloadType })} options={[["direct", "本站下载"], ["external", "外部链接"]]} />
-              <Select label="徽章类型" value={platform.badgeType} onChange={(value) => updateArray(setForm, "platforms", index, { badgeType: value as BadgeType })} options={badgeTypes.map((item) => [item, item])} />
+              <Select label="徽章类型" value={platform.badgeType} onChange={(value) => updateArray(setForm, "platforms", index, { badgeType: value as BadgeType })} options={badgeTypes.map((item) => [item, badgeTypeLabels[item]])} />
               <Field label="版本号" value={platform.version ?? ""} onChange={(value) => updateArray(setForm, "platforms", index, { version: value })} />
               <Field label="更新时间" value={platform.releaseDate ?? ""} onChange={(value) => updateArray(setForm, "platforms", index, { releaseDate: value })} />
               <Field label="文件大小" value={platform.fileSize ?? ""} onChange={(value) => updateArray(setForm, "platforms", index, { fileSize: value })} />
@@ -518,7 +472,7 @@ function MediaEditor({
               </div>
               <div className="mt-3 grid gap-3 md:grid-cols-3">
                 <Select label="类型" value={media.type} onChange={(value) => updateArray(setForm, "media", index, { type: value as "icon" | "screenshot" })} options={[["icon", "图标"], ["screenshot", "截图"]]} />
-                <Select label="平台" value={media.platform ?? ""} onChange={(value) => updateArray(setForm, "media", index, { platform: (value || null) as Platform | null })} options={[["", "无"], ...platforms.map((item) => [item, item] as [string, string])]} />
+              <Select label="平台" value={media.platform ?? ""} onChange={(value) => updateArray(setForm, "media", index, { platform: (value || null) as Platform | null })} options={[["", "无"], ...platforms.map((item) => [item, formatPlatform(item)] as [string, string])]} />
                 <Field label="排序" type="number" value={String(media.sortOrder)} onChange={(value) => updateArray(setForm, "media", index, { sortOrder: Number(value) })} />
               </div>
               <Field label="Alt 文案" value={media.altText ?? ""} onChange={(value) => updateArray(setForm, "media", index, { altText: value })} />
@@ -575,7 +529,7 @@ function ChangelogEditor({
             <div className="grid gap-4 md:grid-cols-4">
               <Field label="版本号" value={log.version} onChange={(value) => updateArray(setForm, "changelogs", index, { version: value })} />
               <Field label="发布时间" value={log.releaseDate} onChange={(value) => updateArray(setForm, "changelogs", index, { releaseDate: value })} />
-              <Select label="语言" value={log.locale} onChange={(value) => updateArray(setForm, "changelogs", index, { locale: value as Locale })} options={[["zh", "中文"], ["en", "English"]]} />
+              <Select label="语言" value={log.locale} onChange={(value) => updateArray(setForm, "changelogs", index, { locale: value as Locale })} options={[["zh", "中文"], ["en", "英文"]]} />
               <label className="mt-7 inline-flex items-center gap-2 text-sm text-slate-700">
                 <input type="checkbox" checked={log.isLatest} onChange={(event) => updateArray(setForm, "changelogs", index, { isLatest: event.target.checked })} />
                 最新版本
@@ -606,7 +560,7 @@ function DocumentsEditor({
           <div key={`${document.type}-${document.locale}`} className="rounded-2xl border border-slate-200 p-4">
             <div className="grid gap-4 md:grid-cols-3">
               <Select label="类型" value={document.type} onChange={(value) => updateArray(setForm, "documents", index, { type: value as DocumentType })} options={[["help", "帮助文档"], ["privacy", "隐私政策"], ["terms", "服务条款"]]} />
-              <Select label="语言" value={document.locale} onChange={(value) => updateArray(setForm, "documents", index, { locale: value as Locale })} options={[["zh", "中文"], ["en", "English"]]} />
+              <Select label="语言" value={document.locale} onChange={(value) => updateArray(setForm, "documents", index, { locale: value as Locale })} options={[["zh", "中文"], ["en", "英文"]]} />
               <Select label="内容类型" value={document.contentType} onChange={(value) => updateArray(setForm, "documents", index, { contentType: value as "markdown" | "external" })} options={[["markdown", "站内 Markdown"], ["external", "外部链接"]]} />
             </div>
             {document.contentType === "external" ? (

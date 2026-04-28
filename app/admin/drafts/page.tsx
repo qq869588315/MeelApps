@@ -20,7 +20,7 @@ export default async function AdminDraftsPage() {
   }));
   return (
     <AdminShell active="/admin/drafts" adminEmail={admin.email}>
-      <PageTitle title="Drafts" description="草稿产品不会出现在前台。" />
+      <PageTitle title="草稿箱" description="草稿产品不会出现在前台。" />
       <ProductTable products={rows} showCreate={false} />
     </AdminShell>
   );

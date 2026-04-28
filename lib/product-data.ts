@@ -403,6 +403,16 @@ export async function saveCategory(input: {
   enName: string;
 }) {
   const now = new Date();
+  const [existing] = await db
+    .select({ id: categories.id })
+    .from(categories)
+    .where(eq(categories.slug, input.slug))
+    .limit(1);
+
+  if (existing && existing.id !== input.id) {
+    throw new Error("分类标识已存在，请换一个标识");
+  }
+
   const [category] = input.id
     ? await db
         .update(categories)
@@ -443,6 +453,21 @@ export async function saveCategory(input: {
     )
   );
 
+  return category;
+}
+
+export async function deleteCategoryIfEmpty(id: number) {
+  const [usage] = await db
+    .select({ total: count(products.id) })
+    .from(products)
+    .where(and(eq(products.categoryId, id), ne(products.status, "deleted")));
+
+  if (Number(usage?.total ?? 0) > 0) {
+    throw new Error("该分类下还有产品，不能删除");
+  }
+
+  const [category] = await db.delete(categories).where(eq(categories.id, id)).returning();
+  if (!category) throw new Error("分类不存在");
   return category;
 }
 

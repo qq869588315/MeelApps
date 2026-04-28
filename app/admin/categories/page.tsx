@@ -10,7 +10,7 @@ export default async function CategoriesPage() {
   const [admin, categories] = await Promise.all([requireAdmin(), getAllCategories()]);
   return (
     <AdminShell active="/admin/categories" adminEmail={admin.email}>
-      <PageTitle title="Categories" description="维护产品分类的中英文名称和排序。" />
+      <PageTitle title="分类管理" description="维护产品分类的中英文名称和排序。" />
       <CategoriesManager
         categories={categories.map((category) => ({
           id: category.id,

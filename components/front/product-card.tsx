@@ -69,7 +69,7 @@ export function ProductCard({
         <a href={detailHref} className={buttonClass("secondary", "rounded-lg")}>
           {t.detail}
         </a>
-        <a href={`${detailHref}#downloads`} className={buttonClass("primary", "rounded-lg")}>
+        <a href={`${detailHref}#versions`} className={buttonClass("primary", "rounded-lg")}>
           <Download className="h-4 w-4" />
           {t.download}
         </a>

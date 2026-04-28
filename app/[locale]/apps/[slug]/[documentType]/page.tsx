@@ -74,7 +74,7 @@ export default async function ProductDocumentPage({ params }: PageProps) {
             </a>
           </section>
         </main>
-        <Footer locale={locale} icpNumber={settings.icpNumber} contactEmail={settings.contactEmail} />
+        <Footer locale={locale} icpNumber={settings.icpNumber} />
       </div>
     );
   }
@@ -98,7 +98,7 @@ export default async function ProductDocumentPage({ params }: PageProps) {
           </div>
         </article>
       </main>
-      <Footer locale={locale} icpNumber={settings.icpNumber} contactEmail={settings.contactEmail} />
+      <Footer locale={locale} icpNumber={settings.icpNumber} />
     </div>
   );
 }

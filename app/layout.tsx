@@ -14,7 +14,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const umamiScript = process.env.UMAMI_SCRIPT_URL;
   const umamiWebsiteId = process.env.UMAMI_WEBSITE_ID;
   return (
-    <html lang="zh">
+    <html lang="zh" data-scroll-behavior="smooth">
       <body>
         {children}
         {umamiScript && umamiWebsiteId ? (

@@ -3,12 +3,10 @@ import { ui } from "@/lib/i18n";
 
 export function Footer({
   locale,
-  icpNumber,
-  contactEmail
+  icpNumber
 }: {
   locale: Locale;
   icpNumber: string;
-  contactEmail: string;
 }) {
   const t = ui[locale];
   return (
@@ -21,7 +19,7 @@ export function Footer({
         <div className="flex flex-wrap gap-4">
           <a href={`/${locale}/apps/focus-box/privacy`}>{t.privacy}</a>
           <a href={`/${locale}/apps/focus-box/terms`}>{t.terms}</a>
-          <a href={`mailto:${contactEmail}`}>{t.contact}</a>
+          <span>{t.contact}</span>
           <span>ICP备案号：{icpNumber}</span>
         </div>
       </div>

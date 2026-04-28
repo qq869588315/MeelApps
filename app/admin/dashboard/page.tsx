@@ -11,7 +11,7 @@ export default async function AdminDashboardPage() {
   const [admin, stats] = await Promise.all([requireAdmin(), getDashboardStats()]);
   return (
     <AdminShell active="/admin/dashboard" adminEmail={admin.email}>
-      <PageTitle title="Dashboard" description="查看产品数量、发布状态和下载点击概览。" />
+      <PageTitle title="数据概览" description="查看产品数量、发布状态和下载点击概览。" />
       <div className="grid gap-4 md:grid-cols-4">
         <StatCard label="产品总数" value={stats.products.total} />
         <StatCard label="已发布" value={stats.products.published} />

@@ -1,6 +1,6 @@
 "use client";
 
-import { Plus } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
@@ -15,9 +15,14 @@ type CategoryRow = {
   };
 };
 
+type Notice = {
+  type: "success" | "error";
+  text: string;
+};
+
 export function CategoriesManager({ categories }: { categories: CategoryRow[] }) {
   const [rows, setRows] = useState(categories);
-  const [message, setMessage] = useState("");
+  const [notice, setNotice] = useState<Notice | null>(null);
 
   function addRow() {
     setRows((current) => [
@@ -33,6 +38,7 @@ export function CategoriesManager({ categories }: { categories: CategoryRow[] })
   }
 
   async function save(row: CategoryRow) {
+    setNotice(null);
     const response = await fetch("/api/admin/categories", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -47,11 +53,32 @@ export function CategoriesManager({ categories }: { categories: CategoryRow[] })
     });
     const json = await response.json().catch(() => null);
     if (!response.ok || !json?.ok) {
-      setMessage(json?.error ?? "保存失败");
+      setNotice({ type: "error", text: json?.error ?? "保存失败" });
       return;
     }
-    setMessage("已保存");
+    setNotice({ type: "success", text: "分类已保存" });
     location.reload();
+  }
+
+  async function remove(row: CategoryRow, index: number) {
+    if (!row.id) {
+      setRows((current) => current.filter((_, rowIndex) => rowIndex !== index));
+      return;
+    }
+
+    const name = row.translations.zh?.name || row.slug;
+    const ok = window.confirm(`确认删除分类「${name}」？只有没有产品内容的分类才能删除。`);
+    if (!ok) return;
+
+    setNotice(null);
+    const response = await fetch(`/api/admin/categories?id=${row.id}`, { method: "DELETE" });
+    const json = await response.json().catch(() => null);
+    if (!response.ok || !json?.ok) {
+      setNotice({ type: "error", text: json?.error ?? "删除失败" });
+      return;
+    }
+    setNotice({ type: "success", text: "分类已删除" });
+    setRows((current) => current.filter((item) => item.id !== row.id));
   }
 
   function update(index: number, values: Partial<CategoryRow>) {
@@ -71,12 +98,22 @@ export function CategoriesManager({ categories }: { categories: CategoryRow[] })
           新建分类
         </Button>
       </div>
-      {message ? <div className="mb-4 rounded-xl bg-slate-50 px-3 py-2 text-sm text-slate-600">{message}</div> : null}
+      {notice ? (
+        <div
+          className={`mb-4 rounded-xl px-3 py-2 text-sm ${
+            notice.type === "success"
+              ? "bg-emerald-50 text-emerald-700"
+              : "bg-red-50 text-red-700"
+          }`}
+        >
+          {notice.text}
+        </div>
+      ) : null}
       <div className="overflow-x-auto rounded-2xl border border-slate-200">
-        <table className="w-full min-w-[760px] text-left text-sm">
+        <table className="w-full min-w-[820px] text-left text-sm">
           <thead className="bg-slate-50 text-slate-500">
             <tr>
-              <th className="px-4 py-3 font-medium">Slug</th>
+              <th className="px-4 py-3 font-medium">分类标识</th>
               <th className="px-4 py-3 font-medium">中文名称</th>
               <th className="px-4 py-3 font-medium">英文名称</th>
               <th className="px-4 py-3 font-medium">排序</th>
@@ -88,7 +125,11 @@ export function CategoriesManager({ categories }: { categories: CategoryRow[] })
             {rows.map((row, index) => (
               <tr key={`${row.id}-${index}`}>
                 <td className="px-4 py-3">
-                  <input className="h-10 w-full rounded-xl border-slate-200 text-sm" value={row.slug} onChange={(event) => update(index, { slug: event.target.value })} />
+                  <input
+                    className="h-10 w-full rounded-xl border-slate-200 text-sm"
+                    value={row.slug}
+                    onChange={(event) => update(index, { slug: event.target.value })}
+                  />
                 </td>
                 <td className="px-4 py-3">
                   <input
@@ -119,15 +160,35 @@ export function CategoriesManager({ categories }: { categories: CategoryRow[] })
                   />
                 </td>
                 <td className="px-4 py-3">
-                  <input className="h-10 w-24 rounded-xl border-slate-200 text-sm" type="number" value={row.sortOrder} onChange={(event) => update(index, { sortOrder: Number(event.target.value) })} />
+                  <input
+                    className="h-10 w-24 rounded-xl border-slate-200 text-sm"
+                    type="number"
+                    value={row.sortOrder}
+                    onChange={(event) => update(index, { sortOrder: Number(event.target.value) })}
+                  />
                 </td>
                 <td className="px-4 py-3">
-                  <input type="checkbox" checked={row.isEnabled} onChange={(event) => update(index, { isEnabled: event.target.checked })} />
+                  <input
+                    type="checkbox"
+                    checked={row.isEnabled}
+                    onChange={(event) => update(index, { isEnabled: event.target.checked })}
+                  />
                 </td>
                 <td className="px-4 py-3">
-                  <Button type="button" variant="secondary" onClick={() => save(row)}>
-                    保存
-                  </Button>
+                  <div className="flex flex-wrap gap-2">
+                    <Button type="button" variant="secondary" onClick={() => save(row)}>
+                      保存
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      className="text-red-700"
+                      onClick={() => remove(row, index)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                      删除
+                    </Button>
+                  </div>
                 </td>
               </tr>
             ))}

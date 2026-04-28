@@ -86,7 +86,6 @@ export default async function LocaleHomePage({ params }: PageProps) {
       <Footer
         locale={locale}
         icpNumber={settings.icpNumber}
-        contactEmail={settings.contactEmail}
       />
     </div>
   );

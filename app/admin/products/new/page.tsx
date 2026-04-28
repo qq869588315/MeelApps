@@ -1,6 +1,7 @@
 import { AdminShell } from "@/components/admin/admin-shell";
-import { ProductForm, createBlankProduct } from "@/components/admin/product-form";
+import { ProductForm } from "@/components/admin/product-form";
 import { requireAdmin } from "@/lib/auth";
+import { createBlankProduct } from "@/lib/product-defaults";
 import { getAllCategories } from "@/lib/product-data";
 
 export const dynamic = "force-dynamic";
