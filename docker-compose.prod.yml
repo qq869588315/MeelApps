@@ -1,0 +1,111 @@
+services:
+  apps-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      NODE_ENV: production
+      APP_URL: ${APP_URL:-https://apps.aameel.top}
+      DEFAULT_LOCALE: ${DEFAULT_LOCALE:-zh}
+      SUPPORTED_LOCALES: ${SUPPORTED_LOCALES:-zh,en}
+      DATABASE_URL: postgres://meel_apps_user:${MEEL_APPS_DB_PASSWORD:-change_me_meel_apps_db_password}@apps-postgres:5432/meel_apps
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@example.com}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
+      ADMIN_PASSWORD_HASH: ${ADMIN_PASSWORD_HASH:-}
+      SESSION_SECRET: ${SESSION_SECRET:-change_me_to_a_long_random_secret}
+      STORAGE_DRIVER: ${STORAGE_DRIVER:-local}
+      UPLOAD_DIR: ${UPLOAD_DIR:-/data/uploads}
+      PUBLIC_UPLOAD_BASE_URL: ${PUBLIC_UPLOAD_BASE_URL:-/uploads}
+      IMAGE_MAX_BYTES: ${IMAGE_MAX_BYTES:-10485760}
+      DOWNLOAD_MAX_BYTES: ${DOWNLOAD_MAX_BYTES:-314572800}
+      UMAMI_URL: ${UMAMI_URL:-https://apps.aameel.top/stats}
+      UMAMI_WEBSITE_ID: ${UMAMI_WEBSITE_ID:-}
+      UMAMI_SCRIPT_URL: ${UMAMI_SCRIPT_URL:-}
+    volumes:
+      - apps_uploads:/data/uploads
+    expose:
+      - "3000"
+    depends_on:
+      apps-postgres:
+        condition: service_healthy
+    networks:
+      - aameel_gateway
+      - apps_internal
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  apps-postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change_me_postgres_password}
+      MEEL_APPS_DB_PASSWORD: ${MEEL_APPS_DB_PASSWORD:-change_me_meel_apps_db_password}
+      UMAMI_DB_PASSWORD: ${UMAMI_DB_PASSWORD:-change_me_umami_db_password}
+    volumes:
+      - apps_postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - apps_internal
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  apps-umami:
+    image: ghcr.io/umami-software/umami:postgresql-latest
+    environment:
+      DATABASE_URL: postgres://umami_user:${UMAMI_DB_PASSWORD:-change_me_umami_db_password}@apps-postgres:5432/umami
+      DATABASE_TYPE: postgresql
+      HASH_SALT: ${UMAMI_HASH_SALT:-change_me_umami_hash_salt}
+      APP_SECRET: ${UMAMI_APP_SECRET:-change_me_umami_app_secret}
+    expose:
+      - "3000"
+    depends_on:
+      apps-postgres:
+        condition: service_healthy
+    networks:
+      - aameel_gateway
+      - apps_internal
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  apps-files:
+    image: caddy:2-alpine
+    command: ["caddy", "file-server", "--listen", ":8080", "--root", "/data/uploads"]
+    volumes:
+      - apps_uploads:/data/uploads:ro
+    expose:
+      - "8080"
+    networks:
+      - aameel_gateway
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  apps_postgres_data:
+  apps_uploads:
+
+networks:
+  aameel_gateway:
+    external: true
+  apps_internal:
+    driver: bridge

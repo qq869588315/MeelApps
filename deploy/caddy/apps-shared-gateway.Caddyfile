@@ -1,0 +1,47 @@
+# Append these site blocks to the existing InfoMe Caddyfile.
+# Do not replace the current infome.aameel.top block.
+
+apps.aameel.top {
+  encode zstd gzip
+
+  @admin path /admin* /api/admin*
+  handle @admin {
+    respond 404
+  }
+
+  redir /stats /stats/ 302
+
+  handle_path /uploads/* {
+    reverse_proxy apps-files:8080
+  }
+
+  handle_path /stats/* {
+    reverse_proxy apps-umami:3000
+  }
+
+  reverse_proxy apps-web:3000
+}
+
+backapps.aameel.top {
+  encode zstd gzip
+
+  handle / {
+    redir /admin/login 302
+  }
+
+  handle_path /uploads/* {
+    reverse_proxy apps-files:8080
+  }
+
+  @assets path /_next/* /favicon.ico /demo/*
+  handle @assets {
+    reverse_proxy apps-web:3000
+  }
+
+  @admin path /admin* /api/admin*
+  handle @admin {
+    reverse_proxy apps-web:3000
+  }
+
+  respond 404
+}
