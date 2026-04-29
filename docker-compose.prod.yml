@@ -1,5 +1,6 @@
 services:
   apps-web:
+    image: meel-apps-web:1.0
     build:
       context: .
       dockerfile: Dockerfile
@@ -85,8 +86,53 @@ services:
         max-file: "3"
 
   apps-files:
-    image: caddy:2-alpine
-    command: ["caddy", "file-server", "--listen", ":8080", "--root", "/data/uploads"]
+    image: meel-apps-web:1.0
+    command:
+      - node
+      - -e
+      - |
+        const http = require("http");
+        const fs = require("fs");
+        const path = require("path");
+        const root = "/data/uploads";
+        const types = {
+          ".avif": "image/avif",
+          ".dmg": "application/octet-stream",
+          ".exe": "application/octet-stream",
+          ".jpg": "image/jpeg",
+          ".jpeg": "image/jpeg",
+          ".msi": "application/octet-stream",
+          ".pkg": "application/octet-stream",
+          ".png": "image/png",
+          ".webp": "image/webp",
+          ".zip": "application/zip"
+        };
+        http.createServer((req, res) => {
+          try {
+            const pathname = decodeURIComponent(new URL(req.url, "http://localhost").pathname);
+            const target = path.resolve(root, "." + pathname);
+            if (!target.startsWith(root + path.sep)) {
+              res.writeHead(403);
+              res.end("Forbidden");
+              return;
+            }
+            fs.stat(target, (error, stat) => {
+              if (error || !stat.isFile()) {
+                res.writeHead(404);
+                res.end("Not Found");
+                return;
+              }
+              res.writeHead(200, {
+                "content-length": stat.size,
+                "content-type": types[path.extname(target).toLowerCase()] || "application/octet-stream"
+              });
+              fs.createReadStream(target).pipe(res);
+            });
+          } catch {
+            res.writeHead(400);
+            res.end("Bad Request");
+          }
+        }).listen(8080, "0.0.0.0");
     volumes:
       - apps_uploads:/data/uploads:ro
     expose:
