@@ -1,12 +1,16 @@
 FROM node:20-alpine AS deps
 WORKDIR /app
-RUN corepack enable
+ARG NPM_REGISTRY=https://registry.npmmirror.com
+ENV COREPACK_NPM_REGISTRY=${NPM_REGISTRY}
+RUN npm config set registry ${NPM_REGISTRY} && corepack enable
 COPY package.json pnpm-lock.yaml* ./
-RUN pnpm install --frozen-lockfile
+RUN pnpm config set registry ${NPM_REGISTRY} && pnpm install --frozen-lockfile
 
 FROM node:20-alpine AS builder
 WORKDIR /app
-RUN corepack enable
+ARG NPM_REGISTRY=https://registry.npmmirror.com
+ENV COREPACK_NPM_REGISTRY=${NPM_REGISTRY}
+RUN npm config set registry ${NPM_REGISTRY} && corepack enable
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
@@ -16,7 +20,9 @@ FROM node:20-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
-RUN corepack enable
+ARG NPM_REGISTRY=https://registry.npmmirror.com
+ENV COREPACK_NPM_REGISTRY=${NPM_REGISTRY}
+RUN npm config set registry ${NPM_REGISTRY} && corepack enable
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
