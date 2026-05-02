@@ -26,7 +26,8 @@ backapps.aameel.top {
   encode zstd gzip
 
   handle / {
-    redir /admin/login 302
+    rewrite * /admin/login
+    reverse_proxy apps-web:3000
   }
 
   handle_path /uploads/* {

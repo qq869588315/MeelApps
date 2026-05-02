@@ -20,7 +20,9 @@ export function Footer({
           <a href={`/${locale}/apps/focus-box/privacy`}>{t.privacy}</a>
           <a href={`/${locale}/apps/focus-box/terms`}>{t.terms}</a>
           <span>{t.contact}</span>
-          <span>ICP备案号：{icpNumber}</span>
+          <a href="https://beian.miit.gov.cn/" rel="noreferrer" target="_blank">
+            ICP备案号：{icpNumber}
+          </a>
         </div>
       </div>
     </footer>

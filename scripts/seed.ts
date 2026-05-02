@@ -37,7 +37,7 @@ async function seedSettings() {
   await db.insert(siteSettings).values([
     { key: "siteName", value: "Meel Apps" },
     { key: "defaultLocale", value: "zh" },
-    { key: "icpNumber", value: "待填写" },
+    { key: "icpNumber", value: "新ICP备2026002990号-1" },
     { key: "contactEmail", value: "hello@example.com" },
     { key: "homeSeoTitleZh", value: "Meel Apps" },
     { key: "homeSeoDescriptionZh", value: "探索 Meel 打造的桌面工具、移动 App 和未来的插件产品。" },

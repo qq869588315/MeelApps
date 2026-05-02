@@ -5,7 +5,7 @@ import { siteSettings, type Locale } from "@/lib/db/schema";
 export const defaultSettings = {
   siteName: "Meel Apps",
   defaultLocale: "zh",
-  icpNumber: "待填写",
+  icpNumber: "新ICP备2026002990号-1",
   contactEmail: "hello@example.com",
   homeSeoTitleZh: "Meel Apps",
   homeSeoDescriptionZh: "探索 Meel 打造的桌面工具、移动 App 和未来的插件产品。",
