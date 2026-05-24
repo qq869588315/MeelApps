@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { DetailInteractive } from "@/components/front/detail-interactive";
 import { Footer } from "@/components/front/footer";
 import { Header } from "@/components/front/header";
+import { formatDownloadCount } from "@/components/front/download-count";
 import { ProductCard } from "@/components/front/product-card";
 import type { ProductCardView } from "@/components/front/types";
 import { AppIcon } from "@/components/ui/app-icon";
@@ -40,6 +41,7 @@ function productToCard(product: PublicProduct, locale: Locale): ProductCardView 
     isPinned: product.isPinned,
     sortOrder: product.sortOrder,
     updatedAt: product.updatedAt.toISOString(),
+    downloadCount: product.downloadCount,
     platforms: product.platforms.map((platform) => ({
       id: platform.id,
       platform: platform.platform,
@@ -122,6 +124,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
                   {product.translation.shortDescription}
                 </p>
                 <div className="mt-4 flex flex-wrap gap-2">
+                  <Badge tone="orange">{formatDownloadCount(product.downloadCount, locale)}</Badge>
                   {product.languages.map((language) => (
                     <Badge key={language.id} tone="green">
                       {locale === "zh" ? language.languageNameZh : language.languageNameEn}

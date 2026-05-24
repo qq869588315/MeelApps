@@ -4,6 +4,7 @@ import { formatPlatform, formatProductType, ui } from "@/lib/i18n";
 import { AppIcon } from "@/components/ui/app-icon";
 import { Badge } from "@/components/ui/badge";
 import { buttonClass } from "@/components/ui/button";
+import { formatDownloadCount } from "./download-count";
 import type { ProductCardView } from "./types";
 
 export function ProductCard({
@@ -48,6 +49,10 @@ export function ProductCard({
         {useCases}
       </div>
       <div className="mt-4 space-y-2 text-xs text-slate-600">
+        <div className="flex items-center gap-1.5 text-slate-500">
+          <Download className="h-3.5 w-3.5 text-orange-500" />
+          <span>{formatDownloadCount(product.downloadCount, locale)}</span>
+        </div>
         <div className="flex flex-wrap gap-1.5">
           <span className="mr-1 text-slate-400">{t.platform}</span>
           {product.platforms

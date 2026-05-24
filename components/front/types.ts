@@ -13,6 +13,7 @@ export type ProductCardView = {
   isPinned: boolean;
   sortOrder: number;
   updatedAt: string;
+  downloadCount: number;
   platforms: Array<{ id: number; platform: Platform; isEnabled: boolean }>;
   languages: Array<{ code: string; name: string }>;
 };

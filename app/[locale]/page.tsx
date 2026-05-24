@@ -61,6 +61,7 @@ export default async function LocaleHomePage({ params }: PageProps) {
     isPinned: product.isPinned,
     sortOrder: product.sortOrder,
     updatedAt: product.updatedAt.toISOString(),
+    downloadCount: product.downloadCount,
     platforms: product.platforms.map((platform) => ({
       id: platform.id,
       platform: platform.platform,
