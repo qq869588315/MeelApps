@@ -12,6 +12,7 @@ export default async function AdminDraftsPage() {
     id: product.id,
     slug: product.slug,
     status: product.status,
+    sourceType: product.sourceType,
     name: product.translations.zh?.name ?? product.translation.name,
     categoryName: product.category?.name ?? null,
     iconUrl: product.iconUrl,

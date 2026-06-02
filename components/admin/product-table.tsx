@@ -6,12 +6,13 @@ import { Badge } from "@/components/ui/badge";
 import { buttonClass, Button } from "@/components/ui/button";
 import { AppIcon } from "@/components/ui/app-icon";
 import { formatPlatform } from "@/lib/i18n";
-import type { ProductStatus } from "@/lib/db/schema";
+import type { ProductSourceType, ProductStatus } from "@/lib/db/schema";
 
 export type AdminProductRow = {
   id: number;
   slug: string;
   status: ProductStatus;
+  sourceType: ProductSourceType;
   name: string;
   categoryName: string | null;
   iconUrl: string | null;
@@ -95,6 +96,7 @@ export function ProductTable({
             <tr>
               <th className="px-4 py-3 font-medium">产品</th>
               <th className="px-4 py-3 font-medium">状态</th>
+              <th className="px-4 py-3 font-medium">来源</th>
               <th className="px-4 py-3 font-medium">分类</th>
               <th className="px-4 py-3 font-medium">平台</th>
               <th className="px-4 py-3 font-medium">下载量</th>
@@ -115,6 +117,9 @@ export function ProductTable({
                 </td>
                 <td className="px-4 py-3">
                   <StatusBadge status={product.status} />
+                </td>
+                <td className="px-4 py-3">
+                  <SourceBadge sourceType={product.sourceType} />
                 </td>
                 <td className="px-4 py-3 text-slate-600">{product.categoryName ?? "-"}</td>
                 <td className="px-4 py-3 text-slate-600">
@@ -187,4 +192,9 @@ function StatusBadge({ status }: { status: ProductStatus }) {
   if (status === "hidden") return <Badge tone="orange">隐藏</Badge>;
   if (status === "deleted") return <Badge tone="red">已删除</Badge>;
   return <Badge>草稿</Badge>;
+}
+
+function SourceBadge({ sourceType }: { sourceType: ProductSourceType }) {
+  if (sourceType === "self_built") return <Badge tone="green">本站工具</Badge>;
+  return <Badge>精选工具</Badge>;
 }

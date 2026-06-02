@@ -14,6 +14,7 @@ export function createBlankProduct(categoryId: number | null): ProductFormValue 
     sortOrder: 0,
     categoryId,
     productType: "desktop",
+    sourceType: "self_built",
     iconUrl: null,
     translations: {
       zh: {

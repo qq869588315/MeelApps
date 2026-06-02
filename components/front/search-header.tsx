@@ -24,7 +24,7 @@ export function SearchHeader({
           </div>
           <div className="hidden sm:block">
             <div className="text-sm font-semibold text-slate-950">Meel Apps</div>
-            <div className="text-xs text-slate-500">apps.aameel.top</div>
+            <div className="text-xs text-slate-500">{t.trustedNav}</div>
           </div>
         </a>
 

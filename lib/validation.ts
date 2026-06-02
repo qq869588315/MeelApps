@@ -11,6 +11,7 @@ export const productPayloadSchema = z.object({
   sortOrder: z.coerce.number().int().default(0),
   categoryId: z.coerce.number().int().nullable(),
   productType: z.enum(["desktop", "mobile", "web_plugin"]),
+  sourceType: z.enum(["self_built", "curated"]).default("self_built"),
   iconUrl: z.string().nullable(),
   translations: z.object({
     zh: z.object({

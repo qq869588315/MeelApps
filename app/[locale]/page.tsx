@@ -56,6 +56,7 @@ export default async function LocaleHomePage({ params }: PageProps) {
     categoryName: product.category?.name ?? null,
     categorySlug: product.category?.slug ?? null,
     productType: product.productType,
+    sourceType: product.sourceType,
     iconUrl: product.iconUrl,
     isFeatured: product.isFeatured,
     isPinned: product.isPinned,
@@ -65,7 +66,8 @@ export default async function LocaleHomePage({ params }: PageProps) {
     platforms: product.platforms.map((platform) => ({
       id: platform.id,
       platform: platform.platform,
-      isEnabled: platform.isEnabled
+      isEnabled: platform.isEnabled,
+      downloadType: platform.downloadType
     })),
     languages: product.languages.map((language) => ({
       code: language.languageCode,
@@ -83,6 +85,7 @@ export default async function LocaleHomePage({ params }: PageProps) {
           slug: category.slug,
           name: category.name
         }))}
+        contactEmail={settings.contactEmail}
       />
       <Footer
         locale={locale}

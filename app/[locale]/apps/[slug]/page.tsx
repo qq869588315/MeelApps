@@ -13,6 +13,7 @@ import { buttonClass } from "@/components/ui/button";
 import { MarkdownContent } from "@/lib/markdown";
 import { detectDevice } from "@/lib/device";
 import type { Locale } from "@/lib/db/schema";
+import { buildFeedbackHref } from "@/lib/feedback";
 import { ui, isLocale } from "@/lib/i18n";
 import {
   getPublicProductBySlug,
@@ -36,6 +37,7 @@ function productToCard(product: PublicProduct, locale: Locale): ProductCardView 
     categoryName: product.category?.name ?? null,
     categorySlug: product.category?.slug ?? null,
     productType: product.productType,
+    sourceType: product.sourceType,
     iconUrl: product.iconUrl,
     isFeatured: product.isFeatured,
     isPinned: product.isPinned,
@@ -45,7 +47,8 @@ function productToCard(product: PublicProduct, locale: Locale): ProductCardView 
     platforms: product.platforms.map((platform) => ({
       id: platform.id,
       platform: platform.platform,
-      isEnabled: platform.isEnabled
+      isEnabled: platform.isEnabled,
+      downloadType: platform.downloadType
     })),
     languages: product.languages.map((language) => ({
       code: language.languageCode,
@@ -99,13 +102,22 @@ export default async function ProductDetailPage({ params }: PageProps) {
       : "unknown";
   const related = await getRelatedProducts(product, locale);
   const docs = product.documents.filter((document) => document.locale === locale);
+  const sourceLabel =
+    product.sourceType === "self_built" ? t.selfBuiltProduct : t.curatedProduct;
+  const sourceTone = product.sourceType === "self_built" ? "green" : "slate";
+  const feedbackHref = buildFeedbackHref({
+    locale,
+    contactEmail: settings.contactEmail,
+    subject: `${t.toolFeedbackSubject}: ${product.translation.name}`,
+    pageUrl: `/${locale}/apps/${product.slug}`
+  });
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <Header locale={locale} />
       <main className="mx-auto max-w-7xl space-y-6 px-4 py-8 sm:px-6">
         <section className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-          <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+          <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
             <div className="flex items-center gap-5">
               <AppIcon
                 name={product.translation.name}
@@ -115,6 +127,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
               <div>
                 <div className="flex flex-wrap gap-2">
                   {product.category ? <Badge tone="blue">{product.category.name}</Badge> : null}
+                  <Badge tone={sourceTone}>{sourceLabel}</Badge>
                   {product.isFeatured ? <Badge tone="purple">{t.recommended}</Badge> : null}
                 </div>
                 <h1 className="mt-3 text-3xl font-bold text-slate-950">
@@ -125,6 +138,8 @@ export default async function ProductDetailPage({ params }: PageProps) {
                 </p>
                 <div className="mt-4 flex flex-wrap gap-2">
                   <Badge tone="orange">{formatDownloadCount(product.downloadCount, locale)}</Badge>
+                  <Badge tone="blue">{t.verified}</Badge>
+                  <Badge tone="green">{t.cleanEntry}</Badge>
                   {product.languages.map((language) => (
                     <Badge key={language.id} tone="green">
                       {locale === "zh" ? language.languageNameZh : language.languageNameEn}
@@ -133,7 +148,18 @@ export default async function ProductDetailPage({ params }: PageProps) {
                 </div>
               </div>
             </div>
+            <a
+              href={feedbackHref}
+              className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            >
+              {t.feedbackThisTool}
+            </a>
           </div>
+          {product.sourceType === "curated" ? (
+            <p className="mt-5 rounded-2xl bg-slate-50 px-4 py-3 text-sm leading-6 text-slate-600">
+              {t.thirdPartyNotice}
+            </p>
+          ) : null}
         </section>
 
         <DetailInteractive

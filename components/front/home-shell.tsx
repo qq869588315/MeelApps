@@ -9,11 +9,13 @@ import type { CategoryFilterView, ProductCardView } from "./types";
 export function HomeShell({
   locale,
   products,
-  categories
+  categories,
+  contactEmail
 }: {
   locale: Locale;
   products: ProductCardView[];
   categories: CategoryFilterView[];
+  contactEmail: string;
 }) {
   const [query, setQuery] = useState("");
   return (
@@ -25,6 +27,7 @@ export function HomeShell({
         categories={categories}
         query={query}
         setQuery={setQuery}
+        contactEmail={contactEmail}
       />
     </>
   );

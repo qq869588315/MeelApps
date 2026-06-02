@@ -11,6 +11,7 @@ import type {
   DownloadType,
   Locale,
   Platform,
+  ProductSourceType,
   ProductStatus,
   ProductType
 } from "@/lib/db/schema";
@@ -186,6 +187,15 @@ export function ProductForm({
                 ["desktop", "桌面端"],
                 ["mobile", "移动端"],
                 ["web_plugin", "Web 插件"]
+              ]}
+            />
+            <Select
+              label="工具来源"
+              value={form.sourceType}
+              onChange={(value) => patch({ sourceType: value as ProductSourceType })}
+              options={[
+                ["self_built", "本站工具"],
+                ["curated", "精选工具"]
               ]}
             />
             <Field

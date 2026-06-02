@@ -24,6 +24,10 @@ export const productTypeEnum = pgEnum("product_type", [
   "mobile",
   "web_plugin"
 ]);
+export const productSourceTypeEnum = pgEnum("product_source_type", [
+  "self_built",
+  "curated"
+]);
 export const platformEnum = pgEnum("platform", [
   "windows",
   "macos",
@@ -108,6 +112,7 @@ export const products = pgTable(
       onDelete: "set null"
     }),
     productType: productTypeEnum("product_type").notNull().default("desktop"),
+    sourceType: productSourceTypeEnum("source_type").notNull().default("self_built"),
     iconUrl: text("icon_url"),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
@@ -117,7 +122,8 @@ export const products = pgTable(
   },
   (table) => ({
     slugIdx: uniqueIndex("products_slug_idx").on(table.slug),
-    statusIdx: index("products_status_idx").on(table.status)
+    statusIdx: index("products_status_idx").on(table.status),
+    sourceTypeIdx: index("products_source_type_idx").on(table.sourceType)
   })
 );
 
@@ -341,6 +347,7 @@ export const categoriesRelations = relations(categories, ({ many }) => ({
 export type Locale = "zh" | "en";
 export type ProductStatus = "draft" | "published" | "hidden" | "deleted";
 export type ProductType = "desktop" | "mobile" | "web_plugin";
+export type ProductSourceType = "self_built" | "curated";
 export type Platform = "windows" | "macos" | "ios" | "android" | "web" | "browser_extension";
 export type DownloadType = "direct" | "external";
 export type BadgeType =

@@ -82,6 +82,7 @@ async function main() {
     sortOrder: 100,
     categoryId: productivity.id,
     productType: "desktop",
+    sourceType: "self_built",
     iconUrl: "/demo/focus-box-icon.svg",
     translations: {
       zh: {
@@ -152,6 +153,7 @@ async function main() {
     sortOrder: 80,
     categoryId: tools.id,
     productType: "mobile",
+    sourceType: "curated",
     iconUrl: "/demo/clip-pocket-icon.svg",
     translations: {
       zh: {
@@ -219,6 +221,7 @@ async function main() {
     sortOrder: 60,
     categoryId: security.id,
     productType: "mobile",
+    sourceType: "curated",
     iconUrl: "/demo/safe-note-icon.svg",
     translations: {
       zh: {
@@ -272,6 +275,7 @@ async function main() {
     sortOrder: 40,
     categoryId: tools.id,
     productType: "desktop",
+    sourceType: "self_built",
     iconUrl: "/demo/clean-desk-icon.svg",
     translations: {
       zh: {
@@ -321,6 +325,7 @@ async function main() {
     sortOrder: 20,
     categoryId: productivity.id,
     productType: "desktop",
+    sourceType: "self_built",
     iconUrl: "/demo/tiny-timer-icon.svg",
     translations: {
       zh: {

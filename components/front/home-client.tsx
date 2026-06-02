@@ -1,11 +1,12 @@
 "use client";
 
-import { SlidersHorizontal, Star } from "lucide-react";
-import { useMemo, useState, type ReactNode } from "react";
-import type { Locale, Platform, ProductType } from "@/lib/db/schema";
+import { SlidersHorizontal } from "lucide-react";
+import { useMemo, useState } from "react";
+import type { Locale, Platform, ProductSourceType, ProductType } from "@/lib/db/schema";
 import { formatPlatform, formatProductType, ui } from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
 import { ProductCard } from "./product-card";
+import { TrustIntro } from "./trust-intro";
 import type { CategoryFilterView, ProductCardView } from "./types";
 
 type SortMode = "featured" | "updated" | "name";
@@ -25,17 +26,20 @@ export function HomeClient({
   products,
   categories,
   query,
-  setQuery
+  setQuery,
+  contactEmail
 }: {
   locale: Locale;
   products: ProductCardView[];
   categories: CategoryFilterView[];
   query: string;
   setQuery: (value: string) => void;
+  contactEmail: string;
 }) {
   const t = ui[locale];
   const [platform, setPlatform] = useState("all");
   const [category, setCategory] = useState("all");
+  const [sourceType, setSourceType] = useState<"all" | ProductSourceType>("all");
   const [type, setType] = useState("all");
   const [language, setLanguage] = useState("all");
   const [sort, setSort] = useState<SortMode>("featured");
@@ -71,6 +75,7 @@ export function HomeClient({
         return false;
       }
       if (category !== "all" && product.categorySlug !== category) return false;
+      if (sourceType !== "all" && product.sourceType !== sourceType) return false;
       if (type !== "all" && product.productType !== type) return false;
       if (language !== "all" && !product.languages.some((item) => item.code === language)) {
         return false;
@@ -88,21 +93,13 @@ export function HomeClient({
         b.updatedAt.localeCompare(a.updatedAt)
       );
     });
-  }, [category, language, locale, platform, products, query, sort, type]);
-
-  const hasActiveSearchOrFilter =
-    query.trim().length > 0 ||
-    platform !== "all" ||
-    category !== "all" ||
-    type !== "all" ||
-    language !== "all";
-
-  const featured = filtered.filter((product) => product.isPinned || product.isFeatured);
+  }, [category, language, locale, platform, products, query, sort, sourceType, type]);
 
   const clearFilters = () => {
     setQuery("");
     setPlatform("all");
     setCategory("all");
+    setSourceType("all");
     setType("all");
     setLanguage("all");
     setSort("featured");
@@ -118,6 +115,8 @@ export function HomeClient({
       setPlatform={setPlatform}
       category={category}
       setCategory={setCategory}
+      sourceType={sourceType}
+      setSourceType={setSourceType}
       type={type}
       setType={setType}
       language={language}
@@ -130,7 +129,11 @@ export function HomeClient({
 
   return (
     <main className="bg-[#f6f8fb]">
-      <section className="mx-auto grid max-w-7xl gap-6 px-4 py-6 sm:px-6 lg:grid-cols-[260px_1fr] lg:items-start">
+      <section className="mx-auto max-w-7xl px-4 py-4 sm:px-6">
+        <TrustIntro locale={locale} contactEmail={contactEmail} />
+      </section>
+
+      <section className="mx-auto grid max-w-7xl gap-6 px-4 pb-6 sm:px-6 lg:grid-cols-[260px_1fr] lg:items-start">
         <aside className="hidden lg:block lg:sticky lg:top-24">{filterPanel}</aside>
 
         <div className="lg:hidden">
@@ -156,34 +159,10 @@ export function HomeClient({
         </div>
 
         <div className="min-w-0 space-y-7">
-          {!hasActiveSearchOrFilter ? (
-            <section>
-              <SectionHeader
-                title={t.featured}
-                description={t.publishedOnly}
-                icon={<Star className="h-5 w-5 text-amber-500" />}
-              />
-              {featured.length ? (
-                <div className="mt-4 grid gap-4 xl:grid-cols-2">
-                  {featured.map((product, index) => (
-                    <ProductCard
-                      key={product.id}
-                      product={product}
-                      locale={locale}
-                      colorIndex={index}
-                    />
-                  ))}
-                </div>
-              ) : (
-                <EmptyState text={t.noResults} />
-              )}
-            </section>
-          ) : null}
-
           <section id="products">
             <SectionHeader
               title={t.allProducts}
-              description={t.productCount.replace("{count}", String(filtered.length))}
+              description={`${t.publishedOnly} ${t.productCount.replace("{count}", String(filtered.length))}`}
             />
             {filtered.length ? (
               <div className="mt-4 grid gap-4 xl:grid-cols-2">
@@ -215,6 +194,8 @@ function FilterPanel({
   setPlatform,
   category,
   setCategory,
+  sourceType,
+  setSourceType,
   type,
   setType,
   language,
@@ -231,6 +212,8 @@ function FilterPanel({
   setPlatform: (value: string) => void;
   category: string;
   setCategory: (value: string) => void;
+  sourceType: "all" | ProductSourceType;
+  setSourceType: (value: "all" | ProductSourceType) => void;
   type: string;
   setType: (value: string) => void;
   language: string;
@@ -259,6 +242,28 @@ function FilterPanel({
       </div>
 
       <div className="space-y-5">
+        <label className="block">
+          <span className="mb-2 block text-xs font-semibold uppercase text-slate-400">{t.sort}</span>
+          <select
+            value={sort}
+            onChange={(event) => setSort(event.target.value as SortMode)}
+            className="h-10 w-full rounded-lg border-slate-200 bg-white text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          >
+            <option value="featured">{locale === "zh" ? "推荐优先" : "Featured first"}</option>
+            <option value="updated">{locale === "zh" ? "最新更新" : "Latest updated"}</option>
+            <option value="name">{locale === "zh" ? "名称排序" : "Name"}</option>
+          </select>
+        </label>
+        <RadioGroup
+          label={t.source}
+          value={sourceType}
+          onChange={(value) => setSourceType(value as "all" | ProductSourceType)}
+          options={[
+            ["all", t.all],
+            ["self_built", t.selfBuilt],
+            ["curated", t.curated]
+          ]}
+        />
         <RadioGroup
           label={t.category}
           value={category}
@@ -295,18 +300,6 @@ function FilterPanel({
             ...languages.map((item) => [item.code, item.name] as [string, string])
           ]}
         />
-        <label className="block">
-          <span className="mb-2 block text-xs font-semibold uppercase text-slate-400">{t.sort}</span>
-          <select
-            value={sort}
-            onChange={(event) => setSort(event.target.value as SortMode)}
-            className="h-10 w-full rounded-lg border-slate-200 bg-white text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-          >
-            <option value="featured">{locale === "zh" ? "推荐优先" : "Featured first"}</option>
-            <option value="updated">{locale === "zh" ? "最新更新" : "Latest updated"}</option>
-            <option value="name">{locale === "zh" ? "名称排序" : "Name"}</option>
-          </select>
-        </label>
       </div>
     </div>
   );
@@ -352,12 +345,10 @@ function RadioGroup({
 
 function SectionHeader({
   title,
-  description,
-  icon
+  description
 }: {
   title: string;
   description?: string;
-  icon?: ReactNode;
 }) {
   return (
     <div className="flex items-center justify-between gap-4">
@@ -365,7 +356,6 @@ function SectionHeader({
         <h2 className="text-xl font-semibold text-slate-950">{title}</h2>
         {description ? <p className="mt-1 text-sm text-slate-500">{description}</p> : null}
       </div>
-      {icon}
     </div>
   );
 }

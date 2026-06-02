@@ -300,7 +300,7 @@ function DownloadLink({
       className="inline-flex min-w-36 items-center justify-center gap-2 rounded-xl bg-slate-950 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800"
     >
       {isExternal ? <ExternalLink className="h-4 w-4" /> : <Download className="h-4 w-4" />}
-      {ui[locale].download}
+      {isExternal ? ui[locale].officialDownload : ui[locale].siteDownload}
     </a>
   );
 }

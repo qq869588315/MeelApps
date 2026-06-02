@@ -23,6 +23,7 @@ import {
   type ProductLanguage,
   type ProductMedia,
   type ProductPlatform,
+  type ProductSourceType,
   type ProductStatus,
   type ProductTranslation,
   type ProductType
@@ -64,6 +65,7 @@ export type ProductPayload = {
   sortOrder: number;
   categoryId: number | null;
   productType: ProductType;
+  sourceType: ProductSourceType;
   iconUrl: string | null;
   translations: Record<
     Locale,
@@ -485,6 +487,7 @@ export async function saveProductAggregate(payload: ProductPayload, id?: number)
             sortOrder: payload.sortOrder,
             categoryId: payload.categoryId,
             productType: payload.productType,
+            sourceType: payload.sourceType,
             iconUrl: payload.iconUrl,
             updatedAt: now,
             publishedAt:
@@ -504,6 +507,7 @@ export async function saveProductAggregate(payload: ProductPayload, id?: number)
             sortOrder: payload.sortOrder,
             categoryId: payload.categoryId,
             productType: payload.productType,
+            sourceType: payload.sourceType,
             iconUrl: payload.iconUrl,
             publishedAt: payload.status === "published" ? now : null,
             hiddenAt: payload.status === "hidden" ? now : null,

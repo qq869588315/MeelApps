@@ -37,6 +37,7 @@ export default async function EditProductPage({ params }: PageProps) {
           sortOrder: product.sortOrder,
           categoryId: product.categoryId,
           productType: product.productType,
+          sourceType: product.sourceType,
           iconUrl: product.iconUrl,
           translations: {
             zh: translationPayload(product.translations.zh),
