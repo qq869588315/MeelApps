@@ -122,7 +122,7 @@ export function ProductForm({
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold text-slate-950">编辑产品：{title}</h1>
-          <p className="mt-1 text-sm text-slate-500">维护展示内容、下载入口、截图、更新日志和 SEO。</p>
+          <p className="mt-1 text-sm text-slate-500">维护展示内容、下载入口、预览、更新日志和 SEO。</p>
         </div>
         <div className="flex flex-wrap gap-2">
           <Button type="button" variant="secondary" onClick={() => save("draft")} disabled={saving}>
@@ -451,10 +451,10 @@ function MediaEditor({
       </div>
       <div className="mt-6">
         <div className="mb-3 flex items-center justify-between">
-          <h3 className="text-sm font-semibold text-slate-950">截图</h3>
+          <h3 className="text-sm font-semibold text-slate-950">预览</h3>
           <label className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-800 hover:bg-slate-50">
             <Upload className="h-4 w-4" />
-            上传截图
+            上传预览
             <input
               type="file"
               accept="image/*"
@@ -481,7 +481,7 @@ function MediaEditor({
                 {media.url ? <img src={media.url} alt="" className="h-full w-full object-cover" /> : <ImageIcon className="m-auto h-8 w-8 text-slate-400" />}
               </div>
               <div className="mt-3 grid gap-3 md:grid-cols-3">
-                <Select label="类型" value={media.type} onChange={(value) => updateArray(setForm, "media", index, { type: value as "icon" | "screenshot" })} options={[["icon", "图标"], ["screenshot", "截图"]]} />
+                <Select label="类型" value={media.type} onChange={(value) => updateArray(setForm, "media", index, { type: value as "icon" | "screenshot" })} options={[["icon", "图标"], ["screenshot", "预览"]]} />
               <Select label="平台" value={media.platform ?? ""} onChange={(value) => updateArray(setForm, "media", index, { platform: (value || null) as Platform | null })} options={[["", "无"], ...platforms.map((item) => [item, formatPlatform(item)] as [string, string])]} />
                 <Field label="排序" type="number" value={String(media.sortOrder)} onChange={(value) => updateArray(setForm, "media", index, { sortOrder: Number(value) })} />
               </div>

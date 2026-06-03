@@ -162,6 +162,22 @@ export default async function ProductDetailPage({ params }: PageProps) {
           ) : null}
         </section>
 
+        <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+          <h2 className="text-lg font-semibold text-slate-950">{t.about}</h2>
+          <div className="mt-4">
+            <MarkdownContent content={product.translation.fullDescription} />
+          </div>
+          {product.translation.featureHighlights.length ? (
+            <div className="mt-5 grid gap-3 md:grid-cols-2">
+              {product.translation.featureHighlights.map((item) => (
+                <div key={item} className="rounded-2xl bg-slate-50 px-4 py-3 text-sm text-slate-700">
+                  {item}
+                </div>
+              ))}
+            </div>
+          ) : null}
+        </section>
+
         <DetailInteractive
           locale={locale}
           detectedOs={detectedOs}
@@ -199,22 +215,6 @@ export default async function ProductDetailPage({ params }: PageProps) {
               sortOrder: log.sortOrder
             }))}
         />
-
-        <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-          <h2 className="text-lg font-semibold text-slate-950">{t.about}</h2>
-          <div className="mt-4">
-            <MarkdownContent content={product.translation.fullDescription} />
-          </div>
-          {product.translation.featureHighlights.length ? (
-            <div className="mt-5 grid gap-3 md:grid-cols-2">
-              {product.translation.featureHighlights.map((item) => (
-                <div key={item} className="rounded-2xl bg-slate-50 px-4 py-3 text-sm text-slate-700">
-                  {item}
-                </div>
-              ))}
-            </div>
-          ) : null}
-        </section>
 
         {docs.length ? (
           <section id="docs" className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
