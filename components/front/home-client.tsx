@@ -21,6 +21,10 @@ const platformOptions: Platform[] = [
 ];
 const typeOptions: ProductType[] = ["desktop", "mobile", "web_plugin"];
 
+function compareOwnership(a: ProductCardView, b: ProductCardView) {
+  return Number(b.sourceType === "self_built") - Number(a.sourceType === "self_built");
+}
+
 export function HomeClient({
   locale,
   products,
@@ -84,6 +88,8 @@ export function HomeClient({
     });
 
     return list.sort((a, b) => {
+      const ownershipOrder = compareOwnership(a, b);
+      if (ownershipOrder) return ownershipOrder;
       if (sort === "name") return a.name.localeCompare(b.name);
       if (sort === "updated") return b.updatedAt.localeCompare(a.updatedAt);
       return (
