@@ -175,7 +175,9 @@ export function DetailInteractive({
                   </td>
                   <td className="px-4 py-3 text-slate-600">{platform.version || "-"}</td>
                   <td className="px-4 py-3 text-slate-600">{platform.releaseDate || "-"}</td>
-                  <td className="px-4 py-3 text-slate-600">{platform.fileSize || "-"}</td>
+                  <td className="px-4 py-3 text-slate-600">
+                    {formatFileSize(platform.fileSize)}
+                  </td>
                   <td className="px-4 py-3 text-slate-600">
                     {platform.minSystemRequirement || "-"}
                   </td>
@@ -282,6 +284,38 @@ export function DetailInteractive({
       ) : null}
     </>
   );
+}
+
+function formatFileSize(fileSize: string | null) {
+  if (!fileSize) return "-";
+  const value = fileSize.trim();
+  const match = value.match(/^([\d,]+(?:\.\d+)?)\s*(bytes?|b|kb|mb|gb|tb)?$/i);
+  if (!match) return value;
+
+  const numericValue = Number(match[1].replace(/,/g, ""));
+  if (!Number.isFinite(numericValue)) return value;
+
+  const unit = (match[2] ?? "b").toLowerCase();
+  const unitIndex = unit.startsWith("k")
+    ? 1
+    : unit.startsWith("m")
+      ? 2
+      : unit.startsWith("g")
+        ? 3
+        : unit.startsWith("t")
+          ? 4
+          : 0;
+  const units = ["B", "KB", "MB", "GB", "TB"];
+  let normalizedValue = numericValue * 1000 ** unitIndex;
+  let normalizedIndex = 0;
+
+  while (normalizedValue >= 1000 && normalizedIndex < units.length - 1) {
+    normalizedValue /= 1000;
+    normalizedIndex += 1;
+  }
+
+  if (normalizedIndex === 0) return `${Math.round(normalizedValue)} B`;
+  return `${normalizedValue.toFixed(1)} ${units[normalizedIndex]}`;
 }
 
 function DownloadLink({
