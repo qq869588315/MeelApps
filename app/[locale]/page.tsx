@@ -85,7 +85,6 @@ export default async function LocaleHomePage({ params }: PageProps) {
           slug: category.slug,
           name: category.name
         }))}
-        contactEmail={settings.contactEmail}
       />
       <Footer
         locale={locale}

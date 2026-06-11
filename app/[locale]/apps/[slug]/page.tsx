@@ -107,7 +107,6 @@ export default async function ProductDetailPage({ params }: PageProps) {
   const sourceTone = product.sourceType === "self_built" ? "green" : "slate";
   const feedbackHref = buildFeedbackHref({
     locale,
-    contactEmail: settings.contactEmail,
     subject: `${t.toolFeedbackSubject}: ${product.translation.name}`,
     pageUrl: `/${locale}/apps/${product.slug}`
   });

@@ -7,6 +7,7 @@ export const dynamic = "force-dynamic";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const products = await getSitemapProducts();
   const now = new Date();
+  const staticPages = ["privacy", "terms", "contact"];
   const entries: MetadataRoute.Sitemap = [
     {
       url: absoluteUrl("/zh"),
@@ -19,6 +20,31 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       alternates: { languages: { zh: absoluteUrl("/zh"), en: absoluteUrl("/en") } }
     }
   ];
+
+  for (const page of staticPages) {
+    entries.push(
+      {
+        url: absoluteUrl(`/zh/${page}`),
+        lastModified: now,
+        alternates: {
+          languages: {
+            zh: absoluteUrl(`/zh/${page}`),
+            en: absoluteUrl(`/en/${page}`)
+          }
+        }
+      },
+      {
+        url: absoluteUrl(`/en/${page}`),
+        lastModified: now,
+        alternates: {
+          languages: {
+            zh: absoluteUrl(`/zh/${page}`),
+            en: absoluteUrl(`/en/${page}`)
+          }
+        }
+      }
+    );
+  }
 
   for (const product of products) {
     entries.push(

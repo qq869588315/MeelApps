@@ -30,15 +30,13 @@ export function HomeClient({
   products,
   categories,
   query,
-  setQuery,
-  contactEmail
+  setQuery
 }: {
   locale: Locale;
   products: ProductCardView[];
   categories: CategoryFilterView[];
   query: string;
   setQuery: (value: string) => void;
-  contactEmail: string;
 }) {
   const t = ui[locale];
   const [platform, setPlatform] = useState("all");
@@ -136,7 +134,7 @@ export function HomeClient({
   return (
     <main className="bg-[#f6f8fb]">
       <section className="mx-auto max-w-7xl px-4 py-4 sm:px-6">
-        <TrustIntro locale={locale} contactEmail={contactEmail} />
+        <TrustIntro locale={locale} />
       </section>
 
       <section className="mx-auto grid max-w-7xl gap-6 px-4 pb-6 sm:px-6 lg:grid-cols-[260px_1fr] lg:items-start">

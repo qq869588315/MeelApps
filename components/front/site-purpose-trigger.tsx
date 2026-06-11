@@ -1,34 +1,18 @@
 "use client";
 
 import { Mail, ShieldCheck, X } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import type { Locale } from "@/lib/db/schema";
-import { buildFeedbackHref } from "@/lib/feedback";
 import { ui } from "@/lib/i18n";
 
 export function SitePurposeTrigger({
-  locale,
-  contactEmail,
-  feedbackSubject,
-  pageUrl
+  locale
 }: {
   locale: Locale;
-  contactEmail: string;
-  feedbackSubject?: string;
-  pageUrl?: string;
 }) {
   const t = ui[locale];
   const [open, setOpen] = useState(false);
-  const mailHref = useMemo(
-    () =>
-      buildFeedbackHref({
-        locale,
-        contactEmail,
-        subject: feedbackSubject ?? t.siteFeedbackSubject,
-        pageUrl
-      }),
-    [contactEmail, feedbackSubject, locale, pageUrl, t.siteFeedbackSubject]
-  );
+  const feedbackHref = `/${locale}/contact?topic=feedback`;
 
   return (
     <>
@@ -103,7 +87,7 @@ export function SitePurposeTrigger({
                 {t.gotIt}
               </button>
               <a
-                href={mailHref}
+                href={feedbackHref}
                 className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-slate-950 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-200"
               >
                 <Mail className="h-4 w-4" />

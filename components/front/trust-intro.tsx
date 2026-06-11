@@ -3,11 +3,9 @@ import { ui } from "@/lib/i18n";
 import { SitePurposeTrigger } from "./site-purpose-trigger";
 
 export function TrustIntro({
-  locale,
-  contactEmail
+  locale
 }: {
   locale: Locale;
-  contactEmail: string;
 }) {
   const t = ui[locale];
 
@@ -23,12 +21,7 @@ export function TrustIntro({
           </p>
         </div>
         <div className="shrink-0 md:pl-4">
-          <SitePurposeTrigger
-            locale={locale}
-            contactEmail={contactEmail}
-            feedbackSubject={t.siteFeedbackSubject}
-            pageUrl={`/${locale}`}
-          />
+          <SitePurposeTrigger locale={locale} />
         </div>
       </div>
     </section>
