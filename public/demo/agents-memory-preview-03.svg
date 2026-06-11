@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 900" role="img" aria-labelledby="title desc">
+  <title id="title">Agents Memory workflow preview</title>
+  <desc id="desc">Preview of checkpoint, active index, and secret reference workflow in agents-memory</desc>
+  <rect width="1440" height="900" fill="#f8fafc"/>
+  <rect x="88" y="78" width="1264" height="744" rx="34" fill="#0f172a"/>
+  <text x="150" y="156" font-family="Segoe UI, Arial, sans-serif" font-size="40" font-weight="700" fill="#f8fafc">Agent Handoff Workflow</text>
+  <text x="150" y="205" font-family="Segoe UI, Arial, sans-serif" font-size="23" fill="#cbd5e1">Capture state once, let the next session continue with the right context.</text>
+  <g font-family="Segoe UI, Arial, sans-serif">
+    <rect x="150" y="280" width="310" height="360" rx="24" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
+    <circle cx="200" cy="335" r="24" fill="#38bdf8"/>
+    <text x="194" y="344" font-size="24" font-weight="700" fill="#082f49">1</text>
+    <text x="150" y="710" font-size="18" fill="#94a3b8"/>
+    <text x="240" y="342" font-size="28" font-weight="700" fill="#f8fafc">checkpoint</text>
+    <text x="190" y="410" font-size="20" fill="#cbd5e1">Reason</text>
+    <rect x="190" y="430" width="220" height="34" rx="10" fill="#0f172a"/>
+    <text x="208" y="454" font-size="18" fill="#bae6fd">pre-compact</text>
+    <text x="190" y="505" font-size="20" fill="#cbd5e1">State</text>
+    <rect x="190" y="525" width="220" height="34" rx="10" fill="#0f172a"/>
+    <text x="208" y="549" font-size="18" fill="#bae6fd">next steps saved</text>
+    <rect x="565" y="280" width="310" height="360" rx="24" fill="#1e293b" stroke="#22c55e" stroke-width="2"/>
+    <circle cx="615" cy="335" r="24" fill="#22c55e"/>
+    <text x="609" y="344" font-size="24" font-weight="700" fill="#052e16">2</text>
+    <text x="655" y="342" font-size="28" font-weight="700" fill="#f8fafc">active index</text>
+    <rect x="605" y="405" width="220" height="36" rx="12" fill="#0f172a"/>
+    <text x="624" y="429" font-size="18" fill="#bbf7d0">deploy rules</text>
+    <rect x="605" y="465" width="220" height="36" rx="12" fill="#0f172a"/>
+    <text x="624" y="489" font-size="18" fill="#bbf7d0">open tasks</text>
+    <rect x="605" y="525" width="220" height="36" rx="12" fill="#0f172a"/>
+    <text x="624" y="549" font-size="18" fill="#bbf7d0">repo map</text>
+    <rect x="980" y="280" width="310" height="360" rx="24" fill="#1e293b" stroke="#c4b5fd" stroke-width="2"/>
+    <circle cx="1030" cy="335" r="24" fill="#a78bfa"/>
+    <text x="1024" y="344" font-size="24" font-weight="700" fill="#2e1065">3</text>
+    <text x="1070" y="342" font-size="28" font-weight="700" fill="#f8fafc">secret_ref</text>
+    <text x="1020" y="410" font-size="20" fill="#cbd5e1">No raw secrets in memory</text>
+    <rect x="1020" y="455" width="220" height="42" rx="12" fill="#0f172a"/>
+    <text x="1038" y="482" font-size="18" fill="#ddd6fe">meelapps.prod.ssh</text>
+    <rect x="1020" y="525" width="220" height="42" rx="12" fill="#0f172a"/>
+    <text x="1038" y="552" font-size="18" fill="#ddd6fe">db.main.password</text>
+  </g>
+  <path d="M474 460h70" stroke="#64748b" stroke-width="6" stroke-linecap="round"/>
+  <path d="M532 445l18 15-18 15" fill="none" stroke="#64748b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M889 460h70" stroke="#64748b" stroke-width="6" stroke-linecap="round"/>
+  <path d="M947 445l18 15-18 15" fill="none" stroke="#64748b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="150" y="700" width="1140" height="52" rx="18" fill="#020617"/>
+  <text x="190" y="735" font-family="Cascadia Mono, Consolas, monospace" font-size="21" fill="#e2e8f0">am active list --project meelapps  |  am secret get --ref &lt;secret_ref&gt;</text>
+</svg>
