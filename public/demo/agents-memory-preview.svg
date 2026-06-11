@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 900" role="img" aria-labelledby="title desc">
+  <title id="title">Agents Memory terminal preview</title>
+  <desc id="desc">A terminal preview showing agents-memory context profile commands</desc>
+  <rect width="1440" height="900" fill="#f8fafc"/>
+  <rect x="100" y="90" width="1240" height="720" rx="28" fill="#0f172a"/>
+  <rect x="100" y="90" width="1240" height="72" rx="28" fill="#1e293b"/>
+  <circle cx="144" cy="126" r="10" fill="#ef4444"/>
+  <circle cx="178" cy="126" r="10" fill="#f59e0b"/>
+  <circle cx="212" cy="126" r="10" fill="#22c55e"/>
+  <text x="720" y="133" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="22" fill="#cbd5e1">agents-memory</text>
+  <g font-family="Cascadia Mono, Consolas, monospace" font-size="28">
+    <text x="150" y="230" fill="#38bdf8">PS E:\workspace\project&gt;</text>
+    <text x="520" y="230" fill="#e2e8f0">am get-context --profile lean</text>
+    <text x="150" y="290" fill="#22c55e">profile:</text>
+    <text x="285" y="290" fill="#e2e8f0">lean</text>
+    <text x="150" y="346" fill="#22c55e">project:</text>
+    <text x="285" y="346" fill="#e2e8f0">meelapps</text>
+    <text x="150" y="402" fill="#22c55e">active:</text>
+    <text x="285" y="402" fill="#e2e8f0">deployment rules, open tasks, repo map</text>
+    <text x="150" y="458" fill="#22c55e">memory:</text>
+    <text x="285" y="458" fill="#e2e8f0">summarized context pack ready</text>
+    <text x="150" y="542" fill="#94a3b8"># switch profile when deeper history is needed</text>
+    <text x="150" y="602" fill="#38bdf8">PS E:\workspace\project&gt;</text>
+    <text x="520" y="602" fill="#e2e8f0">am checkpoint --reason pre-compact</text>
+    <text x="150" y="662" fill="#22c55e">saved:</text>
+    <text x="285" y="662" fill="#e2e8f0">session state, next steps, sensitive refs only</text>
+    <text x="150" y="722" fill="#22c55e">status:</text>
+    <text x="285" y="722" fill="#e2e8f0">local-first runtime ready</text>
+  </g>
+  <rect x="1120" y="205" width="150" height="150" rx="34" fill="#e0f2fe"/>
+  <path d="M1154 294v-56c0-13 10.5-23 23-23h36c12.5 0 23 10 23 23v56c0 13-10.5 23-23 23h-36c-12.5 0-23-10-23-23Z" fill="#0f172a"/>
+  <path d="M1175 247h39M1175 266h27M1175 285h39" stroke="#e0f2fe" stroke-width="7" stroke-linecap="round"/>
+  <circle cx="1232" cy="226" r="15" fill="#22c55e"/>
+</svg>
